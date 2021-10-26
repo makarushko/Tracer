@@ -14,7 +14,13 @@ namespace Tracer
             Thread thread = new Thread(new ThreadStart(c.M0));
             thread.Start();
             thread.Join();
+            
             TraceResult traceResult = tracer.GetTraceResult();
+            ConsoleOutput consoleOutput = new ConsoleOutput();
+            Json_Serializer json = new Json_Serializer();
+            consoleOutput.Output(json.Serialize(traceResult));
+            Xml_Serializer xml = new Xml_Serializer();
+            consoleOutput.Output(xml.Serialize(traceResult));
         }
     }
     

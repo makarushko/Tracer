@@ -1,4 +1,4 @@
-﻿namespace Tracer
+﻿namespace TracerLib
 {
     public interface ISerializer
     {
