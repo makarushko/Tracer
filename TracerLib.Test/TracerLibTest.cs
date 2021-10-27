@@ -7,50 +7,50 @@ namespace TracerLib.Test
     
     public class TracerLibTest
     {
-        static public Tracer tracer;
-        private TraceResult traceResult;
+        static public Tracer Tracer;
+        private TraceResult _traceResult;
 
         [TestInitialize]
 
         public void Setup()
         {
-            tracer = new Tracer();
-            traceResult = new TraceResult();
+            Tracer = new Tracer();
+            _traceResult = new TraceResult();
         }
         
         [TestMethod]
         
         public void StartTrace_MyMethod_returnMyMethod()
         {
-            Foo f = new Foo(tracer);
+            Foo f = new Foo(Tracer);
             
             f.MyMethod();
-            traceResult = tracer.GetTraceResult();
+            _traceResult = Tracer.GetTraceResult();
             
-            Assert.AreEqual("MyMethod",traceResult.Threads[0].Method[0].Name);
+            Assert.AreEqual("MyMethod",_traceResult.Threads[0].Method[0].Name);
         }
         
         [TestMethod]
         public void GetTraceResult_MyMethod_returnMyMethodInnerMethod()
         {
-            Foo f = new Foo(tracer);
+            Foo f = new Foo(Tracer);
             
             f.MyMethod();
-            traceResult = tracer.GetTraceResult();
+            _traceResult = Tracer.GetTraceResult();
             
-            Assert.AreEqual("MyMethod",traceResult.Threads[0].Method[0].Name);
-            Assert.AreEqual("InnerMethod", traceResult.Threads[0].Method[0].ChildMethod[0].Name);
+            Assert.AreEqual("MyMethod",_traceResult.Threads[0].Method[0].Name);
+            Assert.AreEqual("InnerMethod", _traceResult.Threads[0].Method[0].ChildMethod[0].Name);
         }
         
         [TestMethod]
         public void StopTrace_ThreadCount_return2()
         {
-            C c = new C(tracer);
+            C c = new C(Tracer);
             
             c.M0();
-            traceResult = tracer.GetTraceResult();
+            _traceResult = Tracer.GetTraceResult();
             
-            Assert.AreEqual(1, traceResult.Threads.Count);
+            Assert.AreEqual(1, _traceResult.Threads.Count);
         }
         public class Foo
             {

@@ -17,10 +17,16 @@ namespace Tracer
             
             TraceResult traceResult = tracer.GetTraceResult();
             ConsoleOutput consoleOutput = new ConsoleOutput();
+            
+            FileOutput fileOutputJson = new FileOutput("C:/Users/Anna/RiderProjects/Tracer/Tracer/Files/file.json");
             Json_Serializer json = new Json_Serializer();
             consoleOutput.Output(json.Serialize(traceResult));
+            fileOutputJson.Output(json.Serialize(traceResult));
+            
+            FileOutput fileOutputXml = new FileOutput("C:/Users/Anna/RiderProjects/Tracer/Tracer/Files/file.xml");
             Xml_Serializer xml = new Xml_Serializer();
             consoleOutput.Output(xml.Serialize(traceResult));
+            fileOutputXml.Output(xml.Serialize(traceResult));
         }
     }
     

@@ -4,11 +4,7 @@ namespace Tracer
 {
     public class FileOutput : IOutput
     {
-        public string PathToSave
-        {
-            get;
-            private set;
-        }
+        public string PathToSave { get; }
         public void Output(string serializedResult)
         {
              File.WriteAllText(PathToSave, serializedResult);
