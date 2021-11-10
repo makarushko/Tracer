@@ -7,36 +7,45 @@ namespace TracerLib.Test
     
     public class TracerLibTest
     {
-        static public Tracer Tracer;
+        private Tracer tracer;
         private TraceResult _traceResult;
 
         [TestInitialize]
 
         public void Setup()
         {
-            Tracer = new Tracer();
+            tracer = new Tracer();
             _traceResult = new TraceResult();
         }
         
         [TestMethod]
-        
-        public void StartTrace_MyMethod_returnMyMethod()
+        public void TestThreadId()
         {
-            Foo f = new Foo(Tracer);
+           tracer.StartTrace();
+           tracer.StopTrace();
+            _traceResult = tracer.GetTraceResult();
+            
+            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId,_traceResult.Threads[0].IdThread);
+        }
+        
+        [TestMethod]
+        public void TestThreadAndSingleMethodTime()
+        {
+            Foo f = new Foo(tracer);
             
             f.MyMethod();
-            _traceResult = Tracer.GetTraceResult();
+            _traceResult = tracer.GetTraceResult();
             
-            Assert.AreEqual("MyMethod",_traceResult.Threads[0].Method[0].Name);
+            Assert.AreEqual(_traceResult.Threads[0].Time,_traceResult.Threads[0].Method[0].Time);
         }
         
         [TestMethod]
         public void GetTraceResult_MyMethod_returnMyMethodInnerMethod()
         {
-            Foo f = new Foo(Tracer);
+            Foo f = new Foo(tracer);
             
             f.MyMethod();
-            _traceResult = Tracer.GetTraceResult();
+            _traceResult = tracer.GetTraceResult();
             
             Assert.AreEqual("MyMethod",_traceResult.Threads[0].Method[0].Name);
             Assert.AreEqual("InnerMethod", _traceResult.Threads[0].Method[0].ChildMethod[0].Name);
@@ -45,12 +54,15 @@ namespace TracerLib.Test
         [TestMethod]
         public void StopTrace_ThreadCount_return2()
         {
-            C c = new C(Tracer);
+            Foo f = new Foo(tracer);
+            f.MyMethod();
+            C c = new C(tracer);
+            Thread thread = new Thread(c.M0);
+            thread.Start();
+            thread.Join();
+            _traceResult = tracer.GetTraceResult();
             
-            c.M0();
-            _traceResult = Tracer.GetTraceResult();
-            
-            Assert.AreEqual(1, _traceResult.Threads.Count);
+            Assert.AreEqual(2, _traceResult.Threads.Count);
         }
         public class Foo
             {
