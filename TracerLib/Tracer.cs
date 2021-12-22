@@ -66,7 +66,7 @@ namespace TracerLib
 
             StackFrame stackFrame = new StackFrame(1);
             MethodBase methodBase = stackFrame.GetMethod();
-            methodInfo.Name = methodBase.Name;
+            methodInfo.Name =   methodBase.Name;
             methodInfo.Class = !(methodBase.DeclaringType == null) ? methodBase.DeclaringType.Name : "Unknown";
             _threadInfos[id].Push((stopwatch,methodInfo));
         }
