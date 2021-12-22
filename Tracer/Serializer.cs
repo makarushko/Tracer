@@ -24,15 +24,7 @@ namespace TracerLib
         private XmlSerializerNamespaces _xmlSerializerNamespaces = new XmlSerializerNamespaces(new []{ XmlQualifiedName.Empty });
         public string Serialize(object Object)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(Object.GetType());
-            using (StringWriter stringWriter = new StringWriter())
-            {
-                using (XmlWriter xmlWriter = XmlWriter.Create(stringWriter))
-                {
-                    xmlSerializer.Serialize(stringWriter, Object, _xmlSerializerNamespaces);
-                    return stringWriter.ToString();
-                }
-            }
+            
         }
     }
 }
