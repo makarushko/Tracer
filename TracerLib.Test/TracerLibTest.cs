@@ -87,12 +87,10 @@ namespace TracerLib.Test
             public class Bar
             {
                 private ITracer _tracer;
-        
                 internal Bar(ITracer tracer)
                 {
                     _tracer = tracer;
                 }
-            
                 public void InnerMethod()
                 {
                     _tracer.StartTrace();
@@ -104,18 +102,15 @@ namespace TracerLib.Test
             public class C
             {
                 private ITracer _tracer;
-            
                 public C(ITracer tracer)
                 {
                     _tracer = tracer;
                 }
-        
                 public void M0()
                 {
                     M1();
                     M2();
                 }
-            
                 private void M1()
                 {
                     _tracer.StartTrace();

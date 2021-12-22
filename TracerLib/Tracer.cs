@@ -63,7 +63,6 @@ namespace TracerLib
             {
                 _trace.Threads.Add(new ThreadInfo() {IdThread = id});
             }
-
             StackFrame stackFrame = new StackFrame(1);
             MethodBase methodBase = stackFrame.GetMethod();
             methodInfo.Name =   methodBase.Name;
@@ -79,7 +78,6 @@ namespace TracerLib
             (stopwatch, methodInfo) = _threadInfos[id].Pop();
             methodInfo.Time = stopwatch.ElapsedMilliseconds;
             stopwatch.Stop();
-
             if (_threadInfos[id].Count > 0)
             {
                 MethodInfo localMethodInfo;
@@ -97,7 +95,6 @@ namespace TracerLib
                 {
                     _trace.Threads[index].Method = new List<MethodInfo>();
                 }
-                
                 _trace.Threads[index].Method.Add(methodInfo);
                 _trace.Threads[index].Time += methodInfo.Time;
             }
