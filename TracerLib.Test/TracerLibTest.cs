@@ -43,7 +43,6 @@ namespace TracerLib.Test
         public void GetTraceResult_MyMethod_returnMyMethodInnerMethod()
         {
             Foo f = new Foo(_tracer);
-            
             f.MyMethod();
             _traceResult = _tracer.GetTraceResult();
             
