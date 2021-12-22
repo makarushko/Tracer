@@ -2,6 +2,6 @@
 {
     public interface IOutput
     {
-        void Output(string String);
+        void Output(string String); 
     }
 }

@@ -13,7 +13,6 @@ namespace TracerLib
             NullValueHandling = NullValueHandling.Include,
             Formatting = Formatting.Indented,
         };
-        
         public string Serialize(object Object)
         {
             return JsonConvert.SerializeObject(Object, _settings);
