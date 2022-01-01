@@ -9,9 +9,11 @@ namespace Tracer
         {
             TracerLib.Tracer tracer = new TracerLib.Tracer();
             Foo f = new Foo(tracer);
+            
             f.MyMethod();
+            
             C c = new C(tracer);
-            Thread thread = new Thread(c.M0);
+            Thread thread = new Thread(new ThreadStart(c.M0));
             thread.Start();
             thread.Join();
             
@@ -46,7 +48,6 @@ namespace Tracer
             _tracer.StartTrace();
             Thread.Sleep(50);
             _bar.InnerMethod();
-            Thread.Sleep(30);
             _tracer.StopTrace();
         }
     }

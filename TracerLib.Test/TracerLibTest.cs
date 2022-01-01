@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
 
 namespace TracerLib.Test
@@ -40,6 +42,21 @@ namespace TracerLib.Test
         }
         
         [TestMethod]
+        public void TestDoubleMethodTime()
+        {
+            Foo f = new Foo(_tracer);
+            f.MyMethod();
+            _traceResult = _tracer.GetTraceResult();
+            
+            Foo fo = new Foo(_tracer);
+            fo.MyMethod();
+            _traceResult = _tracer.GetTraceResult();
+            
+            Assert.IsTrue(_traceResult.Threads[0].Method[0].Time > _traceResult.Threads[0].Method[1].Time);
+
+        }
+        
+        [TestMethod]
         public void GetTraceResult_MyMethod_returnMyMethodInnerMethod()
         {
             Foo f = new Foo(_tracer);
@@ -62,6 +79,23 @@ namespace TracerLib.Test
             _traceResult = _tracer.GetTraceResult();
             
             Assert.AreEqual(2, _traceResult.Threads.Count);
+        }
+        
+        [TestMethod]
+        public void Test_ExecutionTime()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            Tracer tracer = new Tracer();
+
+            stopwatch.Start();
+            tracer.StartTrace();
+
+            Thread.Sleep(1000);
+
+            stopwatch.Stop();
+            tracer.StopTrace();
+
+            Assert.IsTrue(Math.Abs(stopwatch.ElapsedMilliseconds - tracer.GetTraceResult().Threads[0].Time) < 10);
         }
         public class Foo
             {
