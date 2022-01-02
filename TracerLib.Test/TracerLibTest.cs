@@ -44,16 +44,15 @@ namespace TracerLib.Test
         [TestMethod]
         public void TestDoubleMethodTime()
         {
-            Foo f = new Foo(_tracer);
+            Tracer tracer = new Tracer();
+            Foo f = new Foo(tracer);
             f.MyMethod();
-            _traceResult = _tracer.GetTraceResult();
+            f.MyMethod();
+            TraceResult traceResult = tracer.GetTraceResult();
+            double time = traceResult.Threads[0].Method[0].Time - traceResult.Threads[0].Method[1].Time;
             
-            Foo fo = new Foo(_tracer);
-            fo.MyMethod();
-            _traceResult = _tracer.GetTraceResult();
-            
-            Assert.IsTrue(_traceResult.Threads[0].Method[0].Time > _traceResult.Threads[0].Method[1].Time);
-
+            Assert.IsTrue(traceResult.Threads[0].Method[0].Time > traceResult.Threads[0].Method[1].Time);
+            Assert.IsTrue(time > 10);
         }
         
         [TestMethod]
@@ -61,10 +60,16 @@ namespace TracerLib.Test
         {
             Foo f = new Foo(_tracer);
             f.MyMethod();
+            C c = new C(_tracer);
+            Thread thread = new Thread(new ThreadStart(c.M0));
+            thread.Start();
+            thread.Join();
             _traceResult = _tracer.GetTraceResult();
             
             Assert.AreEqual("MyMethod",_traceResult.Threads[0].Method[0].Name);
             Assert.AreEqual("InnerMethod", _traceResult.Threads[0].Method[0].ChildMethod[0].Name);
+            Assert.AreEqual("M1",_traceResult.Threads[1].Method[0].Name);
+            Assert.AreEqual("M2",_traceResult.Threads[1].Method[1].Name);
         }
         
         [TestMethod]
@@ -111,9 +116,8 @@ namespace TracerLib.Test
                 public void MyMethod()
                 {
                     _tracer.StartTrace();
-                    Thread.Sleep(50);
                     _bar.InnerMethod();
-                    Thread.Sleep(30);
+                    Thread.Sleep(50);
                     _tracer.StopTrace();
                 }
             }
